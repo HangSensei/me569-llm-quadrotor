@@ -1,0 +1,163 @@
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+wheels/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# ============================================================
+# Virtual environments
+# ============================================================
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================================
+# Environment / secrets
+# ============================================================
+.env
+.env.local
+.envrc
+*.pem
+*.key
+secrets/
+
+# ============================================================
+# Data — too large for git, regenerate from scripts
+# ============================================================
+data/*
+!data/.gitkeep
+
+# ============================================================
+# Results — keep summary CSVs + final figures, drop raw dumps
+# ============================================================
+results/**/*.npz
+results/**/*.npy
+results/**/*.pkl
+results/**/*.h5
+results/**/*.hdf5
+results/**/*.pt
+results/**/*.pth
+results/**/raw/
+results/**/checkpoints/
+
+# ============================================================
+# LaTeX build artifacts
+# ============================================================
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+report/**/*.pdf
+!report/final/*.pdf
+
+# ============================================================
+# Jupyter
+# ============================================================
+.ipynb_checkpoints/
+*.ipynb_meta
+
+# ============================================================
+# Editor / IDE
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ============================================================
+# OS
+# ============================================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ============================================================
+# Local scratch / notes that should NOT be public
+# ============================================================
+TODO.md
+NOTES.md
+scratch/
+.reminders/
+*.scratch.*
+
+# ============================================================
+# MLX / HuggingFace model caches
+# ============================================================
+.cache/
+models/
+*.bin
+*.safetensors
+
+# ============================================================
+# Trim block (in-progress experiments not yet ready for sharing)
+# Files exist on local disk; restore via tag pre-trim-2026-05-02.
+# ============================================================
+results/e1_multi_seed.csv
+results/e1_prompt_ablation.csv
+results/e1_data_seed_sweep.csv
+results/e1_diagnostics.csv
+results/e3_multi_seed.csv
+results/e3_multi_seed_clean.csv
+results/e3_prompt_ablation.csv
+results/e3_prompt_ablation_clean.csv
+results/e3_data_seed_sweep.csv
+scripts/e1_multi_seed.py
+scripts/e1_prompt_ablation.py
+scripts/e1_data_seed_sweep.py
+scripts/e1_diagnostics.py
+scripts/e3_multi_seed.py
+scripts/e3_prompt_ablation.py
+scripts/e3_data_seed_sweep.py
+scripts/probe_q_e3_strategies.py
+llm_artifacts/e1_bases/p_qwen_plus_run_02.py
+llm_artifacts/e1_bases/p_qwen_plus_run_03.py
+llm_artifacts/e1_bases/q_qwen_local_run_02.py
+llm_artifacts/e1_bases/q_qwen_local_run_03.py
+llm_artifacts/e1_bases/p_variant_*.py
+llm_artifacts/e1_bases/q_variant_*.py
+llm_artifacts/e3_costs/p_ablation_*.py
+llm_artifacts/e3_costs/q_ablation_*.py
+llm_artifacts/e3_costs/p_multiseed_run_*.py
+llm_artifacts/e3_costs/q_multiseed_run_*.py
+llm_artifacts/e3_costs/probe_*
+llm_artifacts/e3_costs_clean/p_ablation_*.py
+llm_artifacts/e3_costs_clean/q_ablation_*.py
+llm_artifacts/e3_costs_clean/p_multiseed_run_*.py
+llm_artifacts/e3_costs_clean/q_multiseed_run_*.py
+scripts/run_e1.py

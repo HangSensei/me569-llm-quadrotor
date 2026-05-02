@@ -1,0 +1,4 @@
+condition,n_initial_states,horizon,hover_success_rate,num_successful,mean_settling_time_s,median_settling_time_s,mean_control_energy,mean_final_position_error,mean_final_attitude_error,failed_due_to_crash,failed_due_to_timeout,fit_or_call_time_s,llm_model,llm_total_tokens,cost_file
+B,20,20,1.0,20,0.8200000000000001,0.85,0.4747175688467339,3.632505784409797e-10,3.915233530381171e-10,0,0,95.45566773414612,-,0,(in-repo make_baseline_stage_cost)
+P,20,20,1.0,20,1.086,1.08,0.5808474520077523,1.6359803705303353e-05,1.5751158431473005e-06,0,0,7.436403036117554,qwen-plus (Qwen 3.6),1575,p_qwen_plus_run_01.py
+Q,20,20,1.0,20,0.647,0.68,2.5939060738475086,6.450434903095198e-09,6.690092261159002e-09,0,0,233.16431283950806,Qwen3.5-4B-MLX-8bit,0,q_qwen_local_run_01.py

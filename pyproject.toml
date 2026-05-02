@@ -1,0 +1,44 @@
+[project]
+name = "me569_project"
+version = "0.1.0"
+description = "LLM-Augmented Data-Driven Control on the Planar Quadrotor"
+authors = [{name = "Suhang Xu"}]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "gymnasium>=0.29",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+]
+sysid = [
+    "pysindy>=1.7",
+]
+mpc = [
+    "do-mpc[full]>=4.6",
+]
+llm = [
+    "dashscope>=1.14",
+    "mlx-vlm>=0.4",
+]
+all = [
+    "me569_project[dev,sysid,mpc,llm]",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
