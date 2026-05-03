@@ -1,0 +1,3 @@
+condition,observable_description,n_obs,fit_time_s,train_one_step_mse,one_step_mse,rollout_mse_50,llm_call_time_s,llm_model,llm_total_tokens,llm_request_id
+B,polynomial degree 2 (state + 6 squares + 15 cross terms),27,0.9350118637084961,0.005993399354754183,0.006012205079816561,4.784916796978179,,,,
+P,Qwen 3.6-Plus generated,24,0.9150431156158447,0.00040072148966944945,0.0004015042039250906,0.2504798305311955,14.21813678741455,qwen-plus,2049,63f0c9f3-664c-9425-910b-3e3d6eb48507
