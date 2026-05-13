@@ -28,8 +28,12 @@ llm = [
     "dashscope>=1.14",
     "mlx-vlm>=0.4",
 ]
+rl = [
+    "stable-baselines3>=2.0",
+    "torch>=2.0",
+]
 all = [
-    "me569_project[dev,sysid,mpc,llm]",
+    "me569_project[dev,sysid,mpc,llm,rl]",
 ]
 
 [build-system]
