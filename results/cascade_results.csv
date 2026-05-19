@@ -1,0 +1,3 @@
+condition,description,n_basis,active_terms,fit_time_s,eval_time_s,build_failed,hover_success_rate,mean_settling_time_s,mean_control_energy,mean_final_position_error,mean_final_attitude_error,failed_due_to_crash,failed_due_to_timeout
+P,Qwen 3.6-Plus E1 basis (p_qwen_plus_run_01.py),29,12,0.8632750511169434,99.26210713386536,0,1.0,0.8079999999999999,0.44966778277087,0.01938182385079484,2.2597237174789406e-10,0,0
+Q,Qwen3.5-4B E1 basis (q_qwen_local_run_01.py),29,11,1.004303216934204,110.32158279418945,0,0.2,2.515,0.040241988787924815,1.95300287413303,0.023805755314959164,0,16
