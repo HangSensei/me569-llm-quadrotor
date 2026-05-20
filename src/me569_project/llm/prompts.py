@@ -374,7 +374,7 @@ The continuous-time dynamics in numpy notation are
     omega_dot = (u_2 - u_1) * L / I_yy
 
 with constants ``m = 1.0`` kg, ``g = 9.81`` m/s^2, ``L = 0.25`` m,
-``I_yy = 0.0125`` kg*m^2. The discrete-time transitions seen by EDMDc
+``I_yy = 0.01`` kg*m^2. The discrete-time transitions seen by EDMDc
 are the result of an RK4 integrator with ``dt = 0.02`` applied to
 these dynamics.
 """

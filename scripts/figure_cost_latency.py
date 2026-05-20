@@ -177,7 +177,7 @@ def main() -> None:
                       ha="center", va="bottom", fontsize=9)
     # Annotate the empty E4 bar so it isn't read as missing data.
     ax_q.text(
-        3, ymax_q * 0.5, "E4 attempt\nfailed parsing\n(D038)",
+        3, ymax_q * 0.5, "E4 attempt\nfailed parsing",
         ha="center", va="center", fontsize=8, color="#d62728",
         fontweight="bold",
         bbox=dict(boxstyle="round,pad=0.3", fc="#fde0e0",

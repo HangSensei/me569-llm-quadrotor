@@ -120,7 +120,7 @@ def main() -> None:
         # Q annotation at x=2 — placed mid-axis on log scale.
         ax.text(
             2, np.sqrt(p_arr.mean() * b_val),
-            "Q\n3 attempts\nno code fence\n(D036)",
+            "Q\n3 attempts\nno code fence",
             ha="center", va="center", fontsize=9, color="#d62728",
             fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.4", fc="#fde0e0",
@@ -140,7 +140,7 @@ def main() -> None:
 
     fig.suptitle(
         "Experiment 3 — Koopman/EDMDc: P consistently outperforms B; "
-        "Q is fragile (D036)",
+        "Q is fragile",
         fontsize=11, y=0.99,
     )
     fig.tight_layout(rect=[0, 0, 1, 0.93])
