@@ -6,24 +6,32 @@ A course project for **ME569 Machine Learning Control** (University of Washingto
 
 ## Overview
 
-This project evaluates LLM-generated code at two stages of the data-driven control pipeline on a Planar Quadrotor hover task:
+This project evaluates LLM-generated code across the stages of a data-driven control pipeline on a Planar Quadrotor (6D state, 2D control), comparing a frontier cloud model against a small edge model that runs on a laptop.
 
-1. **System identification** — generating a candidate basis library Φ(x,u) for Sparse Identification of Nonlinear Dynamics (SINDy).
-2. **Optimal control** — generating a stage cost function ℓ(x,u) for Model Predictive Control (MPC).
+Four LLM-augmented experiments plus two closed-loop extensions:
 
-Each stage is compared in a three-way study:
+1. **E1 — SINDy basis** — generate a basis library Φ(x,u) for Sparse Identification of Nonlinear Dynamics.
+2. **E2 — MPC stage cost** — generate a stage cost ℓ(x,u) for Model Predictive Control.
+3. **E3 — Koopman/EDMDc observable** — generate an observable ψ(x) for an EDMDc linear-predictor fit.
+4. **E4 — Eureka-style PPO reward** — generate a reward r(s,a) for a Stable-Baselines3 PPO agent.
+5. **Cascade** — drop the E1-fitted SINDy model into the E2 MPC as the prediction model.
+6. **Disturbance sweep** — replay the E2 evaluation under additive process noise.
 
-- **Baseline (B):** textbook polynomial basis and quadratic cost — no LLM.
+A non-LLM trajectory-tracking demo (step + figure-8 references) exercises the controller stack beyond hover.
+
+Each experiment is a three-way study:
+
+- **Baseline (B):** textbook polynomial basis / quadratic cost / negative-quadratic reward — no LLM.
 - **Qwen 3.6-Plus (P):** cloud frontier LLM via Alibaba DashScope API.
 - **Qwen3.5-4B (Q):** locally-runnable edge LLM via mlx-vlm on Apple Silicon.
 
-The deliverable is a cost-vs-quality trade-off table for engineers deciding between cloud and edge LLMs when automating control design tasks.
+The deliverable is a cost-vs-quality trade-off analysis for engineers deciding between cloud and edge LLMs when automating control-design tasks.
 
 ## Project status
 
-Primary scope (Experiment 1: SINDy basis selection, Experiment 2: MPC stage cost design) complete with full B/P/Q coverage. Course timeline: **2026-04-08 → 2026-06-05**.
+All four experiments and both extensions are complete with B/P/Q coverage. Course timeline: **2026-04-08 → 2026-06-05**.
 
-Headline results (single-seed, 20 initial states):
+Headline results:
 
 | Stage | Metric | B | P (Qwen 3.6-Plus) | Q (Qwen3.5-4B) |
 |---|---|---|---|---|
@@ -32,31 +40,39 @@ Headline results (single-seed, 20 initial states):
 | E2 MPC | hover success rate | 100% | 100% | 100% |
 | E2 MPC | mean settling time (s) | 0.82 | 1.11 | 0.82 |
 | E2 MPC | mean control energy | 0.475 | 1.108 | 0.475 |
+| E3 Koopman | validation one-step MSE | 6.0e-3 | 2.3e-4 (≈26× lower) | failed (no code) |
+| E4 PPO | hover success rate @ r=0.30 | 100% | 100% | failed (parse) |
+| E4 PPO | mean control energy @ r=0.30 | 0.186 | 0.152 (18% lower) | failed (parse) |
 
-A second set of E2 results from a clean-prompt rerun (sanitized prompt template that no longer carries a Bryson-shape worked example) is in `results/e3_results_clean.csv`, alongside the original `e3_results.csv`. Multi-seed variance studies and prompt ablations are in progress and will be folded into the final report.
+The headline is bifurcated: LLMs deliver large **structural** gains at system-identification stages (E1, E3) where the right basis or observable unlocks representational capacity the polynomial baseline cannot reach, but they do not improve **numerical** tuning at the cost/reward stages (E2, E4) under nominal evaluation. Two honest caveats run the other way:
+
+- **Cascade.** P's E1-fitted SINDy model dropped into MPC recovers ground-truth-model quality (100% hover, within 5% on all metrics); Q's basis collapses to 20% closed-loop success.
+- **Disturbance.** Under additive process noise the nominal order reverses: at σ=0.10 the aggressively-tuned Q cost reaches 95% hover success vs B's 75% and P's 55%.
+
+Q matches P only when the prompt scaffolds the answer (explicit equations or a worked example). Under sanitized prompts on novel tasks it produced no usable code across four independent attempts (three on E3, one on E4) — emitting reasoning text or markdown-contaminated indentation instead of a loadable function. Both the original (prompt-leaked) and sanitized reruns are kept under `results/`, because the prompt-leak audit is itself part of the contribution.
 
 ## Repository layout
 
 ```
-src/me569_project/      Python package (dynamics, env, controllers, SysID, LLM clients)
-tests/                  pytest test suite
-scripts/                runnable experiments and demos
+src/me569_project/      Python package (dynamics, env, controllers, SysID, MPC, RL, LLM clients)
+tests/                  pytest test suite (260 tests)
+scripts/                runnable experiments, figure generators, and demos
 data/                   generated trajectory data (gitignored)
 results/                experiment outputs (CSVs + figures)
-llm_artifacts/          LLM-generated basis libraries (E1) and stage costs (E2)
+llm_artifacts/          LLM-generated code: SINDy bases (E1), MPC costs (E2),
+                        Koopman observables (E3), Eureka rewards (E4)
 ```
 
 ## Getting started
 
-Set up the environment (Python 3.11):
+This project uses [`uv`](https://docs.astral.sh/uv/) for dependency management (Python ≥ 3.11; the committed `uv.lock` pins the full environment).
 
 ```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"            # tests only
-pip install -e ".[all]"            # tests + experiment runners
-pytest
+uv sync --extra all      # install package + all experiment runners
+uv run pytest            # run the test suite
 ```
+
+(A plain `pip install -e ".[all]"` into a virtualenv also works if you prefer.)
 
 ### Running the experiments
 
@@ -64,16 +80,19 @@ Each experiment runs the baseline (B) unconditionally. The two LLM conditions ne
 
 - **B (baseline):** nothing extra.
 - **P (Qwen 3.6-Plus):** export `DASHSCOPE_API_KEY=sk-...` (Alibaba Cloud DashScope account required). Scripts skip P silently if the variable is unset.
-- **Q (Qwen3.5-4B):** runs locally via `mlx-vlm` on Apple Silicon. Weights (`mlx-community/Qwen3.5-4B-MLX-8bit`, ~4.8 GB) auto-download from HuggingFace on first use and cache in `~/.cache/huggingface/`. Set `E1_SKIP_Q=1` or `E3_SKIP_Q=1` to skip Q on non-Apple-Silicon machines.
-
-Headline runs:
+- **Q (Qwen3.5-4B):** runs locally via `mlx-vlm` on Apple Silicon. Weights (`mlx-community/Qwen3.5-4B-MLX-8bit`, ~4.8 GB) auto-download from HuggingFace on first use and cache in `~/.cache/huggingface/`. Skip flags (e.g. `E1_SKIP_Q=1`, `KOOPMAN_SKIP_Q=1`) let the runners proceed on non-Apple-Silicon machines.
 
 ```bash
-DASHSCOPE_API_KEY=sk-... python scripts/run_e1_full.py     # E1 single-seed B/P/Q
-DASHSCOPE_API_KEY=sk-... python scripts/run_e3_full.py     # E2 single-seed B/P/Q
+DASHSCOPE_API_KEY=sk-... uv run python scripts/run_e1_full.py      # E1 SINDy basis (B/P/Q)
+DASHSCOPE_API_KEY=sk-... uv run python scripts/run_e3_full.py      # E2 MPC cost (B/P/Q)
+DASHSCOPE_API_KEY=sk-... uv run python scripts/run_koopman.py      # E3 Koopman/EDMDc (B/P/Q)
+DASHSCOPE_API_KEY=sk-... uv run python scripts/run_eureka.py       # E4 Eureka PPO reward (B/P/Q)
+uv run python scripts/run_tracking.py                              # trajectory tracking demo (no LLM)
+uv run python scripts/run_cascade.py                               # SINDy-MPC cascade
+uv run python scripts/run_disturbance.py                           # disturbance-robustness sweep
 ```
 
-CSV outputs land in `results/`; the LLM-generated Python code (basis libraries, stage costs) lands in `llm_artifacts/`.
+Figure generators live alongside the runners (`scripts/figure_*.py`, `scripts/*_figure.py`). CSV outputs land in `results/`; the LLM-generated Python code lands in `llm_artifacts/`.
 
 ## Author
 
