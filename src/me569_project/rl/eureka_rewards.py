@@ -30,8 +30,11 @@ def baseline_reward(state: np.ndarray, action: np.ndarray) -> float:
     everywhere else. The magnitude grows with position, attitude,
     velocity, and control-effort errors.
 
-    Mirrors ``mpc.baseline_cost.make_baseline_stage_cost`` but with
-    the sign flipped (PPO maximizes, MPC minimizes).
+    Uses Bryson's-rule weights close to
+    ``mpc.baseline_cost.make_baseline_stage_cost`` with the sign
+    flipped (PPO maximizes, MPC minimizes). The one deviation is the
+    angular-rate weight: 1.0 here versus 0.5 in the MPC stage cost,
+    because the velocity terms are lumped under a single weight.
 
     Parameters
     ----------

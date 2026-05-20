@@ -202,10 +202,10 @@ def evaluate_ppo(
 ) -> EvalResult:
     """Closed-loop evaluation matching E2's evaluation API.
 
-    Reuses the seeded uniform-box initial-state sampler from
-    ``mpc.evaluation._sample_initial_states`` to give the same
-    initial-state distribution as the E2 hover task; this makes the
-    PPO policy's metrics directly comparable to E2's MPC metrics.
+    Replicates the seeded uniform-box initial-state sampling used by
+    the E2 hover task (same bounds and seeding convention as
+    ``mpc.evaluation``), so the PPO policy's metrics are directly
+    comparable to E2's MPC metrics.
     """
     rng = np.random.default_rng(seed)
     r = init_radius
