@@ -119,7 +119,7 @@ def main() -> None:
     )
 
     fig.suptitle(
-        "Experiment 2 — D033: Q is prompt-deterministic (CV = 0%); "
+        "Experiment 2 — Q is prompt-deterministic (CV = 0%); "
         "P samples a meaningful distribution",
         fontsize=11, y=0.99,
     )

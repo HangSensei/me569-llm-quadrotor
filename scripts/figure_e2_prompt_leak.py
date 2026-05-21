@@ -114,7 +114,7 @@ def main() -> None:
     )
 
     fig.suptitle(
-        "Experiment 2 — D033 prompt-leak audit: removing the Bryson-shape "
+        "Experiment 2 — prompt-leak audit: removing the Bryson-shape "
         "worked example flips Q's behaviour",
         fontsize=11, y=0.99,
     )
