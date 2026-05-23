@@ -22,6 +22,10 @@ optimizer does better.
 
 API surface
 -----------
+- ``build_design_matrix(data, basis_fn)``: build the (Phi, Y, n_basis)
+  design matrix once.
+- ``fit_from_design_matrix(Phi, Y, basis_fn, n_basis, ...)``: fit STLSQ
+  on a (possibly subsampled) design matrix and return a model.
 - ``fit_with_basis_fn(data, basis_fn, ...)``: fit and return a
   ``LLMBasisSysIDModel`` ready to evaluate.
 - ``LLMBasisSysIDModel``: lightweight container with ``predict``,
@@ -152,11 +156,17 @@ class LLMBasisSysIDModel:
         return total_err_sq / total_count if total_count > 0 else 0.0
 
 
-def _build_phi_and_y(
+def build_design_matrix(
     data: TrajectoryData,
     basis_fn: Callable,
 ) -> tuple[np.ndarray, np.ndarray, int]:
-    """Build feature matrix Phi and finite-difference target Y from data."""
+    """Build feature matrix Phi and finite-difference target Y from data.
+
+    Returns ``(Phi, Y, n_basis)`` where ``Phi`` is ``(N*T, n_basis)`` of
+    basis features and ``Y`` is ``(N*T, 6)`` of finite-difference state
+    derivatives. Exposed publicly so callers can build the full design
+    matrix once and refit STLSQ on row subsamples (data-efficiency sweep).
+    """
     N = data.num_trajectories
     T = data.steps_per_trajectory
     dt = data.dt
@@ -190,6 +200,49 @@ def _build_phi_and_y(
     return Phi, Y, n_basis
 
 
+def fit_from_design_matrix(
+    Phi: np.ndarray,
+    Y: np.ndarray,
+    basis_fn: Callable,
+    n_basis: int,
+    feature_names: list[str] | None = None,
+    threshold: float = 0.1,
+) -> LLMBasisSysIDModel:
+    """Fit ``x_dot ~= Phi @ Xi`` via STLSQ on a precomputed design matrix.
+
+    Identical sparse-regression path as ``fit_with_basis_fn`` but takes the
+    already-built ``(Phi, Y)`` so a subsample of rows can be refit cheaply.
+    """
+    if Phi.ndim != 2 or Phi.shape[1] != n_basis:
+        raise ValueError(
+            f"Phi must have shape (n_samples, {n_basis}); got {Phi.shape}"
+        )
+    if Y.ndim != 2 or Y.shape[0] != Phi.shape[0]:
+        raise ValueError(
+            f"Y must have shape ({Phi.shape[0]}, n_state); got {Y.shape}"
+        )
+    optimizer = STLSQ(threshold=threshold)
+    optimizer.fit(Phi, Y)
+    # sklearn convention: coef_ shape is (n_targets, n_features) = (n_state, n_basis)
+    Xi = np.asarray(optimizer.coef_, dtype=np.float64).T  # transpose to (n_basis, n_state)
+
+    if feature_names is None:
+        feature_names = [f"basis_{i}" for i in range(n_basis)]
+    elif len(feature_names) != n_basis:
+        raise ValueError(
+            f"feature_names has length {len(feature_names)}, "
+            f"basis_fn produced {n_basis} features"
+        )
+
+    return LLMBasisSysIDModel(
+        basis_fn=basis_fn,
+        Xi=Xi,
+        n_basis=n_basis,
+        threshold=threshold,
+        feature_names=feature_names,
+    )
+
+
 def fit_with_basis_fn(
     data: TrajectoryData,
     basis_fn: Callable,
@@ -218,25 +271,8 @@ def fit_with_basis_fn(
     LLMBasisSysIDModel
         Fitted model ready for prediction and metric computation.
     """
-    Phi, Y, n_basis = _build_phi_and_y(data, basis_fn)
-
-    optimizer = STLSQ(threshold=threshold)
-    optimizer.fit(Phi, Y)
-    # sklearn convention: coef_ shape is (n_targets, n_features) = (n_state, n_basis)
-    Xi = np.asarray(optimizer.coef_, dtype=np.float64).T  # transpose to (n_basis, n_state)
-
-    if feature_names is None:
-        feature_names = [f"basis_{i}" for i in range(n_basis)]
-    elif len(feature_names) != n_basis:
-        raise ValueError(
-            f"feature_names has length {len(feature_names)}, "
-            f"basis_fn produced {n_basis} features"
-        )
-
-    return LLMBasisSysIDModel(
-        basis_fn=basis_fn,
-        Xi=Xi,
-        n_basis=n_basis,
-        threshold=threshold,
-        feature_names=feature_names,
+    Phi, Y, n_basis = build_design_matrix(data, basis_fn)
+    return fit_from_design_matrix(
+        Phi, Y, basis_fn, n_basis,
+        feature_names=feature_names, threshold=threshold,
     )
