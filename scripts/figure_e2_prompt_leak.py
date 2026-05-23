@@ -96,21 +96,33 @@ def main() -> None:
     e_old_max = max(energy_old)
     e_clean_max = max(energy_clean)
     e_ymax = max(e_old_max, e_clean_max)
-    axes[0].annotate(
+    ax0 = axes[0]
+    # Compute ylim top that the code will apply after this block.
+    _ymin0, _ymax0 = ax0.get_ylim()
+
+    # Orange: Q-OLD = Bryson char-for-char (bar top at y=0.475).
+    # Place text above P-OLD bar top (1.11), centred between B and P groups.
+    # At x=0.5 the nearest bar edges are B-CLEAN right=0.175 and P-OLD left=0.825
+    # so there is 0.65 data-units of horizontal clearance — enough for 3-line text.
+    ax0.annotate(
         "Q under OLD prompt\nreproduces Bryson\nchar-for-char",
         xy=(2 - width/2, energy_old[2]),
-        xytext=(0.55, e_ymax * 0.78),
-        fontsize=8.5, color="#a14a00", ha="left", va="center",
+        xytext=(0.50, 1.25),
+        fontsize=8.5, color="#a14a00", ha="center", va="bottom",
         arrowprops=dict(arrowstyle="->", color="#a14a00", lw=0.8,
-                        connectionstyle="arc3,rad=-0.2"),
+                        connectionstyle="arc3,rad=-0.25"),
     )
-    axes[0].annotate(
+
+    # Blue: Q-CLEAN = 5.46×B (bar top at y=2.59).
+    # Place text in the empty air above P group, well left of Q-CLEAN bar:
+    # x ≈ 0.9 (gap between P-OLD right edge and Q-OLD left edge), y ≈ 2.05.
+    ax0.annotate(
         "Q under CLEAN\nlocks onto a different\nfixed cost (5.46$\\times$B)",
         xy=(2 + width/2, energy_clean[2]),
-        xytext=(0.95, e_ymax * 0.45),
-        fontsize=8.5, color="#1d3a8a", ha="left", va="center",
+        xytext=(0.90, 2.00),
+        fontsize=8.5, color="#1d3a8a", ha="left", va="bottom",
         arrowprops=dict(arrowstyle="->", color="#1d3a8a", lw=0.8,
-                        connectionstyle="arc3,rad=0.2"),
+                        connectionstyle="arc3,rad=0.20"),
     )
 
     fig.suptitle(

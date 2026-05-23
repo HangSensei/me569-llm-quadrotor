@@ -23,6 +23,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
 import numpy as np
 
 
@@ -61,7 +62,7 @@ def main() -> None:
     fig, axes = plt.subplots(1, 3, figsize=(11.5, 4.0))
 
     metric_specs = [
-        ("hover_success_rate", "Hover success rate", (0, 1.05),
+        ("hover_success_rate", "Hover success rate", (0, 1.15),
          "(higher = better)"),
         ("mean_settling_time_s", "Mean settling time (s)", None,
          "(lower = better)"),
@@ -103,11 +104,17 @@ def main() -> None:
                     ref_v, color="black", linestyle="--", linewidth=1.0,
                     alpha=0.7,
                 )
+                # Blend axes-x (fraction) with data-y so the label always
+                # sits at the right edge of the axes interior without
+                # getting clipped by bbox_inches="tight".
+                trans = mtransforms.blended_transform_factory(
+                    ax.transAxes, ax.transData
+                )
                 ax.text(
-                    len(conditions) - 0.5, ref_v,
-                    f" GT-MPC ref = {ref_v:.3g}",
-                    ha="left", va="center", fontsize=8, color="black",
-                    alpha=0.85,
+                    0.88, ref_v,
+                    f"GT-MPC ref = {ref_v:.3g}",
+                    ha="right", va="bottom", fontsize=8, color="black",
+                    alpha=0.85, transform=trans,
                 )
 
         # Annotate values + build-failed markers

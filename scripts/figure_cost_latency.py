@@ -78,10 +78,10 @@ def main() -> None:
     # Per-experiment LLM-call timing (seconds). Pull from headline CSVs +
     # multi-seed gap-fill CSVs to get robust means.
     src = {
-        "E1\nSINDy basis": [
+        "E1\nSINDy\nbasis": [
             REPO_ROOT / "results" / "e1_results.csv",
         ],
-        "E2\nMPC cost": [
+        "E2\nMPC\ncost": [
             REPO_ROOT / "results" / "e3_results_clean.csv",
         ],
         "E3\nKoopman": [
