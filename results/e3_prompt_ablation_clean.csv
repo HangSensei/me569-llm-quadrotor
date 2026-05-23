@@ -1,0 +1,10 @@
+condition,variant,prompt_chars,response_chars,llm_call_time_s,llm_total_tokens,extract_ok,sandbox_ok,build_ok,eval_ok,status,failure_stage,error_message,success_rate,mean_settling_time_s,mean_control_energy,num_successful,failed_due_to_crash,failed_due_to_timeout,cost_file
+P,minimal,377,835,7.119948148727417,412,True,True,False,False,build_failed,PlanarQuadrotorMPC,"Exception: CasADi matrices are not iterable by design.
+                      Did you mean to iterate over m.nz, with m IM/DM/SX?
+                      Did you mean to iterate over horzsplit(m,1)/vertsplit(m,1) with m IM/DM/SX/MX?
+                      ",0.0,nan,nan,0,0,0,p_ablation_minimal.py
+P,current,4982,957,8.488585948944092,1634,True,True,True,True,ok,,,1.0,0.726,1.7586052420001164,20,0,0,p_ablation_current.py
+P,cheat,5320,661,6.586474895477295,1654,True,True,True,True,ok,,,1.0,1.032,0.7084255265903838,20,0,0,p_ablation_cheat.py
+Q,minimal,388,12398,205.5975742340088,0,True,True,True,True,ok,,,0.85,5.258823529411765,0.025365563155201942,17,0,3,q_ablation_minimal.py
+Q,current,4993,11864,202.67962527275085,0,True,True,True,True,ok,,,1.0,0.647,2.5939060738475086,20,0,0,q_ablation_current.py
+Q,cheat,5331,12125,203.14706993103027,0,True,True,True,True,ok,,,1.0,0.419,8.438914039201112,20,0,0,q_ablation_cheat.py

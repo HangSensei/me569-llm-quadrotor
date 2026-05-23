@@ -124,40 +124,6 @@ models/
 *.bin
 *.safetensors
 
-# ============================================================
-# Trim block (in-progress experiments not yet ready for sharing)
-# Files exist on local disk; restore via tag pre-trim-2026-05-02.
-# ============================================================
-results/e1_multi_seed.csv
-results/e1_prompt_ablation.csv
-results/e1_data_seed_sweep.csv
-results/e1_diagnostics.csv
-results/e3_multi_seed.csv
-results/e3_multi_seed_clean.csv
-results/e3_prompt_ablation.csv
-results/e3_prompt_ablation_clean.csv
-results/e3_data_seed_sweep.csv
-scripts/e1_multi_seed.py
-scripts/e1_prompt_ablation.py
-scripts/e1_data_seed_sweep.py
-scripts/e1_diagnostics.py
-scripts/e3_multi_seed.py
-scripts/e3_prompt_ablation.py
-scripts/e3_data_seed_sweep.py
-scripts/probe_q_e3_strategies.py
-llm_artifacts/e1_bases/p_qwen_plus_run_02.py
-llm_artifacts/e1_bases/p_qwen_plus_run_03.py
-llm_artifacts/e1_bases/q_qwen_local_run_02.py
-llm_artifacts/e1_bases/q_qwen_local_run_03.py
-llm_artifacts/e1_bases/p_variant_*.py
-llm_artifacts/e1_bases/q_variant_*.py
-llm_artifacts/e3_costs/p_ablation_*.py
-llm_artifacts/e3_costs/q_ablation_*.py
-llm_artifacts/e3_costs/p_multiseed_run_*.py
-llm_artifacts/e3_costs/q_multiseed_run_*.py
-llm_artifacts/e3_costs/probe_*
-llm_artifacts/e3_costs_clean/p_ablation_*.py
-llm_artifacts/e3_costs_clean/q_ablation_*.py
-llm_artifacts/e3_costs_clean/p_multiseed_run_*.py
-llm_artifacts/e3_costs_clean/q_multiseed_run_*.py
-scripts/run_e1.py
+# (Trim block removed 2026-05-22: the supporting experiments — multi-seed,
+# prompt-ablation, data-seed sweeps, diagnostics, and their LLM artifacts —
+# are now tracked. Large arrays (*.npz/*.npy) remain ignored above.)
