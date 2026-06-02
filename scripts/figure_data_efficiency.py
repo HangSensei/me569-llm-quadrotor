@@ -1,8 +1,8 @@
 """Figure — data-efficiency: validation one-step MSE vs number of samples.
 
 Two log-log panels:
-  Left  (E1 SINDy basis): B (poly deg 3), P (Qwen 3.6-Plus), Q (Qwen3.5-4B).
-  Right (E3 Koopman/EDMDc): B (poly deg 2), P (Qwen 3.6-Plus).
+  Left  (E1 SINDy basis): B (poly deg 3), P (Qwen 3.6-Plus), Q (Qwen3.5-4B), R (tuned RBF).
+  Right (E3 Koopman/EDMDc): B (poly deg 2), P (Qwen 3.6-Plus), R (tuned RBF).
 Mean +/- 1 std band over the 3 subsample seeds.
 
 Output: results/figure_data_efficiency.png
@@ -23,11 +23,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RESULTS_CSV = REPO_ROOT / "results" / "data_efficiency.csv"
 OUTPUT_PNG = REPO_ROOT / "results" / "figure_data_efficiency.png"
 
-COLORS = {"B": "#7f7f7f", "P": "#1f77b4", "Q": "#d62728"}
+COLORS = {"B": "#7f7f7f", "P": "#1f77b4", "Q": "#d62728", "R": "#2ca02c"}
 LABELS = {
     "B": "B (polynomial)",
     "P": "P (Qwen 3.6-Plus)",
     "Q": "Q (Qwen3.5-4B)",
+    "R": "R (RBF, tuned)",
 }
 
 
@@ -69,11 +70,11 @@ def _plot_panel(ax, exp_data, conditions, title):
 def main() -> None:
     data = _load()
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.6))
-    _plot_panel(axes[0], data["E1"], ["B", "P", "Q"], "E1 — SINDy basis selection")
-    _plot_panel(axes[1], data["E3"], ["B", "P"], "E3 — Koopman / EDMDc observable")
+    _plot_panel(axes[0], data["E1"], ["B", "P", "Q", "R"], "E1 — SINDy basis selection")
+    _plot_panel(axes[1], data["E3"], ["B", "P", "R"], "E3 — Koopman / EDMDc observable")
     fig.suptitle(
-        "Data efficiency — LLM-chosen bases reach a far lower error floor; "
-        "the polynomial baseline stays bounded above it at all N",
+        "Data efficiency — LLM-chosen bases vs polynomial (B) and tuned RBF (R); "
+        "the gap is error-floor height, not sample count",
         fontsize=11, y=0.99,
     )
     fig.tight_layout(rect=[0, 0, 1, 0.93])

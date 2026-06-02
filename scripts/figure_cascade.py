@@ -32,7 +32,7 @@ CASCADE_CSV = REPO_ROOT / "results" / "cascade_results.csv"
 REF_CSV = REPO_ROOT / "results" / "e3_results.csv"  # ground-truth-MPC reference
 OUTPUT_PNG = REPO_ROOT / "results" / "figure_cascade.png"
 
-COLORS = {"B": "#7f7f7f", "P": "#1f77b4", "Q": "#d62728"}
+COLORS = {"B": "#7f7f7f", "P": "#1f77b4", "Q": "#d62728", "R": "#2ca02c"}
 
 
 def _read_rows(path: Path) -> dict:
@@ -57,7 +57,7 @@ def main() -> None:
     ref = _read_rows(REF_CSV)
     ref_b = ref.get("B")  # ground-truth MPC + Bryson reference
 
-    conditions = [c for c in ["B", "P", "Q"] if c in rows]
+    conditions = [c for c in ["B", "P", "Q", "R"] if c in rows]
 
     fig, axes = plt.subplots(1, 3, figsize=(11.5, 4.0))
 
@@ -76,23 +76,34 @@ def main() -> None:
     }
 
     for ax, (key, ylabel, ylim, sub) in zip(axes, metric_specs):
-        vals = []
-        labels_x = []
-        colors = []
-        build_failed_idx = []
-        for i, cond in enumerate(conditions):
-            r = rows[cond]
-            failed = int(_f(r.get("build_failed", "0")) or 0) == 1
-            v = _f(r.get(key, "")) if not failed else float("nan")
-            vals.append(v)
-            labels_x.append(cond)
-            colors.append(COLORS[cond])
-            if failed:
-                build_failed_idx.append(i)
         x = np.arange(len(conditions))
-        bars = ax.bar(
-            x, vals, color=colors, edgecolor="black", linewidth=0.7,
-        )
+        vals = []
+        reasons = []  # None -> plot numeric bar; else annotation text in place of a bar
+        colors = []
+        for cond in conditions:
+            r = rows[cond]
+            failed_build = int(_f(r.get("build_failed", "0")) or 0) == 1
+            success = _f(r.get("hover_success_rate", ""))
+            colors.append(COLORS[cond])
+            if key == "hover_success_rate":
+                # Success rate is always meaningful (0 is the point for B/R).
+                vals.append(0.0 if failed_build else success)
+                reasons.append("build\nfailed" if failed_build else None)
+            else:
+                # Settle / energy are only meaningful when the controller
+                # actually hovers; a 0%-success run has no settling time and
+                # only a failed-rollout energy, so we annotate instead of
+                # plotting a misleading bar.
+                if failed_build:
+                    vals.append(float("nan"))
+                    reasons.append("build\nfailed")
+                elif np.isnan(success) or success == 0:
+                    vals.append(float("nan"))
+                    reasons.append("0%\nsuccess")
+                else:
+                    vals.append(_f(r.get(key, "")))
+                    reasons.append(None)
+        ax.bar(x, vals, color=colors, edgecolor="black", linewidth=0.7)
         if ylim is not None:
             ax.set_ylim(*ylim)
 
@@ -117,12 +128,13 @@ def main() -> None:
                     alpha=0.85, transform=trans,
                 )
 
-        # Annotate values + build-failed markers
-        for xi, v, cond in zip(x, vals, conditions):
-            if np.isnan(v):
+        # Annotate numeric values, or a failure marker where there is no bar.
+        ymax = ax.get_ylim()[1]
+        for xi, v, reason in zip(x, vals, reasons):
+            if reason is not None:
                 ax.text(
-                    xi, ax.get_ylim()[1] * 0.5, "build\nfailed",
-                    ha="center", va="center", fontsize=10, color="#d62728",
+                    xi, ymax * 0.5, reason,
+                    ha="center", va="center", fontsize=9, color="#d62728",
                     fontweight="bold",
                     bbox=dict(boxstyle="round,pad=0.3", fc="#fde0e0",
                               ec="#d62728", lw=1.0),
@@ -134,7 +146,7 @@ def main() -> None:
                 )
 
         ax.set_xticks(x)
-        ax.set_xticklabels(labels_x, fontsize=12)
+        ax.set_xticklabels(conditions, fontsize=12)
         ax.set_ylabel(ylabel)
         ax.set_title(f"{ylabel}\n{sub}", fontsize=10)
         ax.grid(axis="y", linestyle=":", alpha=0.5)
