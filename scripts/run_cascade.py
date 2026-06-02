@@ -12,6 +12,7 @@ Conditions:
   baseline), STLSQ threshold 0.1.
 - P: Qwen 3.6-Plus generated basis from `llm_artifacts/e1_bases/p_qwen_plus_run_01.py`.
 - Q: Qwen3.5-4B generated basis from `llm_artifacts/e1_bases/q_qwen_local_run_01.py`.
+- R: tuned RBF basis (cascade-capped M, from `llm_artifacts/rbf/e1_rbf_cascade.npz`).
 
 Output:
 - ``results/cascade_results.csv`` — one row per condition with closed-loop metrics.
@@ -43,6 +44,7 @@ from me569_project.data.trajectory_generator import (
 from me569_project.mpc.baseline_cost import make_baseline_stage_cost
 from me569_project.mpc.evaluation import evaluate_controller
 from me569_project.quadrotor_dynamics import QuadrotorParams
+from me569_project.sysid.rbf_basis import build_rbf_e1
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -424,6 +426,18 @@ def main() -> int:
             print(f"[Q] FAILED to load basis: {e}")
     else:
         print(f"[Q] Skipped: {q_path} not found.")
+
+    # R — tuned RBF (cascade-capped M), module-built basis like B.
+    try:
+        r_basis = build_rbf_e1(REPO_ROOT, for_cascade=True)
+        r_row = run_condition(
+            "R", r_basis, train,
+            description="tuned RBF basis (cascade-capped M)",
+        )
+        if r_row is not None:
+            rows.append(r_row)
+    except Exception as e:
+        print(f"[R] FAILED to build/run: {e}")
 
     print()
     print("=" * 76)

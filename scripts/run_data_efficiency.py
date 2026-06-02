@@ -28,6 +28,7 @@ from me569_project.sysid.llm_sysid_model import (
     fit_from_design_matrix,
 )
 from me569_project.sysid.polynomial_basis import make_polynomial_basis_fn
+from me569_project.sysid.rbf_basis import build_rbf_e1, build_rbf_e3
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 E1_BASES = REPO_ROOT / "llm_artifacts" / "e1_bases"
@@ -146,12 +147,16 @@ def main() -> int:
     rows += sweep_condition_e1("B", b_basis, b_names, train, val, LADDER, SUBSAMPLE_SEEDS)
     rows += sweep_condition_e1("P", p_basis, None, train, val, LADDER, SUBSAMPLE_SEEDS)
     rows += sweep_condition_e1("Q", q_basis, None, train, val, LADDER, SUBSAMPLE_SEEDS)
+    r_basis = build_rbf_e1(REPO_ROOT, for_cascade=False)
+    rows += sweep_condition_e1("R", r_basis, None, train, val, LADDER, SUBSAMPLE_SEEDS)
 
     # E3: B (poly deg 2), P  (Q failed E3 categorically -> excluded)
     p_obs = _load_observable(KOOPMAN_OBS / "p_qwen_plus_run_01.py")
     print("E3 sweep ...")
     rows += sweep_condition_e3("B", polynomial_observable, train, val, LADDER, SUBSAMPLE_SEEDS)
     rows += sweep_condition_e3("P", p_obs, train, val, LADDER, SUBSAMPLE_SEEDS)
+    r_obs = build_rbf_e3(REPO_ROOT)
+    rows += sweep_condition_e3("R", r_obs, train, val, LADDER, SUBSAMPLE_SEEDS)
 
     RESULTS_CSV.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["experiment", "condition", "n_samples", "seed", "val_one_step_mse"]
