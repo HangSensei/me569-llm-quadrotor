@@ -227,7 +227,7 @@ def build_mpc_cost_prompt() -> str:
 # below tells the LLM the observable will be passed into an EDMDc
 # linear regression where the lifted state is a function of state alone
 # and the control enters separately through the B matrix. Mixing the
-# two created the prompt audit issue captured in D036 (2026-05-03):
+# two created the prompt audit issue captured on 2026-05-03:
 # Q's first def under the old prompt tried to consume controls as
 # x[6], x[7] before self-correcting in a later def block.
 # ----------------------------------------------------------------------
@@ -387,9 +387,9 @@ def build_koopman_observable_prompt(include_eom: bool = False) -> str:
     system spec (state-only observables, EDMDc lifted-space target),
     and stitches the E3-specific Koopman task instructions on top.
     When ``include_eom`` is True, the explicit equations of motion are
-    appended — used for the Q condition (Qwen3.5-4B) per decision D025.
+    appended — used for the Q condition (Qwen3.5-4B) by design.
 
-    Note (D036, 2026-05-03): an earlier version of this builder reused
+    Note (2026-05-03 prompt audit): an earlier version of this builder reused
     ``SINDY_BASIS_SYSTEM_DESCRIPTION``, which mentioned SINDy + STLSQ
     and listed ``u_1, u_2`` in the observable input set. That created
     an internal inconsistency with the EDMDc task body and is the
@@ -410,9 +410,9 @@ def build_koopman_observable_prompt(include_eom: bool = False) -> str:
 # constants — a system description distinct from the SINDy / Koopman
 # ones (no SINDy / STLSQ / EDMDc framing leaks), and a task body that
 # specifies the function signature and the higher-is-better convention.
-# An optional EOM appendix is included for the Q condition (D025).
+# An optional EOM appendix is included for the Q condition.
 #
-# Anti-leak rules (D033 / D036 lessons):
+# Anti-leak rules:
 # - No specific weight numbers in the prompt body.
 # - No ``Bryson`` / ``quadratic`` / ``cost`` words that would push the
 #   LLM toward a specific reward shape.
@@ -563,9 +563,9 @@ def build_eureka_reward_prompt(include_eom: bool = False) -> str:
     Uses the dedicated ``EUREKA_SYSTEM_DESCRIPTION`` (no SINDy / EDMDc
     framing) and the E4-specific task instructions. When ``include_eom``
     is True, the explicit equations of motion are appended — used for
-    the Q condition (Qwen3.5-4B) per decision D025.
+    the Q condition (Qwen3.5-4B) by design.
 
-    Anti-leak compliance (D033 / D036): the assembled prompt does not
+    Anti-leak compliance: the assembled prompt does not
     contain SINDy / STLSQ / EDMDc framing, does not list specific
     Bryson-shape weights, and does not show worked example reward
     values.

@@ -3,7 +3,7 @@
 Answer the primary question left open after commit 23d13d1: is
 Qwen-Plus really creative-stochastic on E3 (different weights per
 call) and is Qwen3.5-4B really memorization-deterministic (identical
-weights per call)? D029 logs the hypothesis; this script collects
+weights per call)? we log this hypothesis; this script collects
 the evidence.
 
 For each condition (P, Q) the script makes 3 fresh real LLM calls
@@ -150,7 +150,7 @@ def _build_and_eval(
 
 def run_baseline(params: QuadrotorParams) -> E3Row | None:
     print()
-    print("[B] Hand-written baseline (D011 Bryson's rule) ...")
+    print("[B] Hand-written baseline (Bryson's rule) ...")
     stage_cost = make_baseline_stage_cost(params)
     return _build_and_eval(
         condition="B",

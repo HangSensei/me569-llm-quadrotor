@@ -1,4 +1,4 @@
-"""Figure 3 — E2 prompt-leak: OLD vs CLEAN prompt comparison (D033 evidence).
+"""Figure 3 — E2 prompt-leak: OLD vs CLEAN prompt comparison.
 
 Reads `results/e3_results.csv` (OLD prompt with the Bryson-shape worked
 example) and `results/e3_results_clean.csv` (CLEAN prompt with the
@@ -13,7 +13,7 @@ The headline:
   Q reproduced Bryson char-for-char (memorization). Under CLEAN, Q locked
   onto a different deterministic answer at 5.46× the Bryson energy.
 
-This is direct evidence for the D029 creative-stochastic vs
+This is direct evidence for the creative-stochastic vs
 memorization-deterministic axis.
 
 Output: results/figure_e2_prompt_leak.png

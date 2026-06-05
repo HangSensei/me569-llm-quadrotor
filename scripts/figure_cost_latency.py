@@ -89,7 +89,7 @@ def main() -> None:
             REPO_ROOT / "results" / "koopman_multi_seed.csv",
             # Include OLD-prompt result so Q's E3 attempt-time is visible.
             # Even though the OLD-prompt Q output was eliminated under audit
-            # (D036), the LLM-call wall-time itself is a fair latency
+            #, the LLM-call wall-time itself is a fair latency
             # data point for the cost/latency comparison.
             REPO_ROOT / "results" / "koopman_results.csv",
         ],

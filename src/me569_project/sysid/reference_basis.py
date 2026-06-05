@@ -20,7 +20,7 @@ Two reference bases are provided:
   state terms (p_x, p_z, theta) that the true dynamics do NOT depend
   on. STLSQ should discard those extra features as redundant.
 
-Dynamics (from ``quadrotor_dynamics.py`` and D002):
+Dynamics (from ``quadrotor_dynamics.py``):
 
     p_x_dot   = v_x
     p_z_dot   = v_z

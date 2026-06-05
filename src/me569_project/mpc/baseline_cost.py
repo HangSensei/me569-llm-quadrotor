@@ -5,7 +5,7 @@ Planar Quadrotor:
 
     ℓ(x, u) = xᵀ Q x + (u - u_hover)ᵀ R (u - u_hover)
 
-with Q and R chosen via Bryson's rule from the spec D011 / Section 3.1
+with Q and R chosen via Bryson's rule from the spec, Section 3.1
 defaults. The Q matrix penalizes deviations from the origin in
 position, attitude, and velocity; the R matrix penalizes deviations
 from per-rotor hover thrust ``u_hover = m * g / 2``.
@@ -23,7 +23,7 @@ from typing import Callable
 from me569_project.quadrotor_dynamics import QuadrotorParams
 
 
-# Default Q and R weights from spec D011 / Section 3.1.
+# Default Q and R weights from spec, Section 3.1.
 # Q rows correspond to [p_x, p_z, theta, v_x, v_z, omega].
 DEFAULT_Q_DIAG: tuple[float, ...] = (10.0, 10.0, 5.0, 1.0, 1.0, 0.5)
 DEFAULT_R_DIAG: tuple[float, ...] = (0.1, 0.1)
@@ -47,9 +47,9 @@ def make_baseline_stage_cost(
         Used only to compute ``u_hover = m * g / 2``. Defaults to the
         standard ``QuadrotorParams()``.
     Q_diag : tuple of 6 floats, optional
-        Diagonal of the state-cost matrix. Default from D011.
+        Diagonal of the state-cost matrix. Default from the spec.
     R_diag : tuple of 2 floats, optional
-        Diagonal of the control-deviation cost matrix. Default from D011.
+        Diagonal of the control-deviation cost matrix. Default from the spec.
     """
     if params is None:
         params = QuadrotorParams()

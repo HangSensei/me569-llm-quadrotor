@@ -11,7 +11,7 @@ Output:
 - ``results/eureka_multi_reward.csv`` — 3 rows (one per LLM call)
 - ``llm_artifacts/eureka_rewards_multireward/p_qwen_plus_run_{01,02,03}.py``
 
-Q is intentionally skipped — D038 records 1 Q failure under the clean
+Q is intentionally skipped — we recorded 1 Q failure under the clean
 prompt, plus 3 prior E3 failures. Combined fragility narrative is
 preserved without further retries.
 

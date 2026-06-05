@@ -11,7 +11,7 @@ Responsibilities
 - Read the DashScope API key from the constructor argument or the
   ``DASHSCOPE_API_KEY`` environment variable.
 - Build a ``messages``-format request targeting the ``qwen-plus`` alias
-  (which, as of April 2026, is backed by Qwen 3.6 per decision D005).
+  (which, as of April 2026, is backed by Qwen 3.6).
 - Translate HTTP errors, rate limits, and missing output into a single
   ``QwenPlusError`` exception type.
 - Track per-call and cumulative usage (tokens, calls) for cost logging

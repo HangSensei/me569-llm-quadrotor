@@ -4,8 +4,7 @@ This module hides the PySINDy 2.x API surface behind a compact function
 ``fit_sindy`` and a ``SINDyFitResult`` dataclass holding the fitted
 model plus the metadata needed downstream for the B/P/Q comparison.
 
-The baseline (B) configuration uses ``PolynomialLibrary(degree=3)`` per
-decision D011 and spec §3.1. Experiments P (Qwen-Plus) and Q (Qwen3.5-4B)
+The baseline (B) configuration uses ``PolynomialLibrary(degree=3)`` per the project spec §3.1. Experiments P (Qwen-Plus) and Q (Qwen3.5-4B)
 will call ``fit_sindy`` with a custom ``feature_library`` built from the
 LLM-generated basis function list.
 
@@ -74,7 +73,7 @@ def fit_sindy(
         Output of ``generate_trajectories``.
     feature_library : PySINDy feature library, optional
         Basis function library. Defaults to ``PolynomialLibrary(degree=3)``
-        which is the baseline per D011.
+        which is the baseline.
     threshold : float
         Sparsity threshold for the STLSQ optimizer. Higher = sparser model.
 

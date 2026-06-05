@@ -11,7 +11,7 @@ from me569_project.mpc.baseline_cost import (
 from me569_project.quadrotor_dynamics import QuadrotorParams
 
 
-def test_default_Q_R_match_spec_D011():
+def test_default_Q_R_match_spec():
     assert DEFAULT_Q_DIAG == (10.0, 10.0, 5.0, 1.0, 1.0, 0.5)
     assert DEFAULT_R_DIAG == (0.1, 0.1)
 

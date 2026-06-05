@@ -3,8 +3,7 @@
 Single-seed E3 (in ``koopman_results_clean.csv``) has only one P call
 and one Q attempt. To get an error bar on the P headline number, we
 re-call Qwen 3.6-Plus three times under the same clean prompt and
-fit EDMDc each time. Q is intentionally skipped — D036 already
-records 3 independent Q failures under the clean prompt; more
+fit EDMDc each time. Q is intentionally skipped — we already record 3 independent Q failures under the clean prompt; more
 attempts dilute the fragility narrative without adding info.
 
 Output:

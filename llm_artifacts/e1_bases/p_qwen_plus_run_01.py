@@ -2,7 +2,7 @@
 
 Captured from the committed run in commit 711a681. Prompt: honest
 SINDY_BASIS prompt without equation leak. Qwen-Plus backend: qwen-plus
-alias (Qwen 3.6 per D005). Threshold used for the committed fit: 0.1.
+alias (Qwen 3.6). Threshold used for the committed fit: 0.1.
 
 Committed E1 metrics for this basis:
     n_basis     = 29    (one basis below; the extracted code had two

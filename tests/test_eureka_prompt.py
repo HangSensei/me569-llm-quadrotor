@@ -1,10 +1,8 @@
 """Tests for the E4 Eureka-style RL reward prompt template.
 
-These tests enforce the anti-leak rules from the E4 plan
-(`docs/superpowers/plans/2026-05-03-e4-eureka-rl-plan.md` §6 / §13.4)
-plus the carry-over lessons from D033 (no Bryson-shape worked example)
-and D036 (use a dedicated system description, do not reuse the SINDy /
-Koopman ones).
+These tests enforce the prompt anti-leak rules: no Bryson-shape worked
+example in the reward prompt, and a dedicated system description that is
+not reused from the SINDy / Koopman tasks.
 """
 import re
 
@@ -35,7 +33,7 @@ def test_task_body_does_not_mention_bryson_or_specific_weight_words():
 
 
 def test_task_body_does_not_contain_specific_weight_numbers():
-    """No 10.0, 5.0, 0.1 etc — the audited weights from D033 / D028."""
+    """No 10.0, 5.0, 0.1 etc — the audited weights."""
     body = EUREKA_REWARD_TASK_INSTRUCTIONS
     # The body may contain the constant ``4.905`` (u_hover) as a
     # physics fact, but not the specific Bryson weights.
@@ -71,7 +69,7 @@ def test_task_body_warns_against_io_and_random():
 
 
 # ---------------------------------------------------------------------------
-# System description distinct from SINDy / Koopman ones (D036 lesson).
+# System description distinct from SINDy / Koopman ones.
 # ---------------------------------------------------------------------------
 
 def test_eureka_system_description_is_distinct_from_sindy():

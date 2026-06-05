@@ -1,13 +1,13 @@
 """Generate the headline figure for E3 (Koopman / EDMDc).
 
 Reads BOTH ``results/koopman_results.csv`` (the OLD prompt — SINDy-framed
-system description, kept for D036 audit comparison) and
+system description, kept for audit comparison) and
 ``results/koopman_results_clean.csv`` (the audited clean prompt with the
 dedicated ``KOOPMAN_SYSTEM_DESCRIPTION``). Produces a 2-panel
 horizontal-bar comparison on (a) val one-step MSE and (b) 50-step
 free-run rollout MSE, log scale, with both prompt variants side-by-side
 per condition and a clear annotation that Q under the clean prompt
-failed to produce a usable code fence after three attempts (D036).
+failed to produce a usable code fence after three attempts.
 
 Writes ``results/koopman_comparison.png``. Caption-ready for Final Report.
 """

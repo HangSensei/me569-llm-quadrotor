@@ -1,4 +1,4 @@
-"""Figure 2 — E2 multi-seed CV: P shows variance, Q is deterministic (D033).
+"""Figure 2 — E2 multi-seed CV: P shows variance, Q is deterministic.
 
 Reads `results/e3_multi_seed_clean.csv` (3 P + 3 Q runs under the
 sanitized prompt). Plots control energy as scatter dots per condition,
@@ -7,7 +7,7 @@ with B as a single reference line.
 The headline: P (Qwen 3.6-Plus, temperature 0.3) samples a meaningfully
 different cost shape on each call (energy CV ≈ 65%). Q (Qwen3.5-4B,
 greedy decoding) returns the IDENTICAL stage cost on every call
-(energy CV = 0%). This is the D029 creative-stochastic vs
+(energy CV = 0%). This is the creative-stochastic vs
 memorization-deterministic axis.
 
 Output: results/figure_e2_multi_seed_cv.png

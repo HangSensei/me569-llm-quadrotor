@@ -1,8 +1,6 @@
 """Tests for the Koopman observable prompt template (E3, external numbering).
 
-These tests enforce the anti-leak rules from the E3 plan
-(`docs/superpowers/plans/2026-05-03-e3-koopman-plan.md`, §7) plus the
-post-audit fixes from D036:
+These tests enforce the prompt anti-leak rules:
 
 1. The Koopman task instructions do not name specific trig observables
    (no ``sin``, ``cos``, ``bilinear``) outside the EOM appendix.
@@ -130,7 +128,7 @@ def test_build_prompt_default_excludes_eom():
 
 
 # ---------------------------------------------------------------------------
-# D036 post-audit checks: dedicated KOOPMAN_SYSTEM_DESCRIPTION, no SINDy
+# Post-audit checks: dedicated KOOPMAN_SYSTEM_DESCRIPTION, no SINDy
 # leakage in the assembled prompt, observable explicitly state-only.
 # ---------------------------------------------------------------------------
 
@@ -138,7 +136,7 @@ def test_koopman_system_description_does_not_mention_sindy_or_stlsq():
     """The Koopman system description must not reference SINDy / STLSQ.
 
     Mixing E1's SINDy framing with E3's EDMDc task body confused Q on
-    the original run (D036) — Q's first def attempted to consume
+    the original run — Q's first def attempted to consume
     ``x[6]`` and ``x[7]`` as controls before self-correcting in later
     def blocks. The clean E3 system description below removes the
     SINDy mentions and the ``(p_x..u_2)`` listing that suggested

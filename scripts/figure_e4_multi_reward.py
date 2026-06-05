@@ -1,4 +1,4 @@
-"""Figure 5 — E4 multi-reward variance isolation (D038 + 5/5 gap-fill).
+"""Figure 5 — E4 multi-reward variance isolation (5/5 gap-fill).
 
 Compares two flavours of "P × 3" on E4:
 
@@ -11,7 +11,7 @@ The headline: PPO-seed variance is small (settle CV ≈ 2%, energy
 CV ≈ 8%). LLM-call variance is meaningfully larger on settle (CV
 ≈ 10%) but comparable on energy. The reward function space sampled
 by the LLM is narrow on energy but stretches the time-vs-energy
-trade-off — consistent with D029 axis (P creative-but-robust).
+trade-off — consistent with the axis (P creative-but-robust).
 
 Output: results/figure_e4_multi_reward.png
 """

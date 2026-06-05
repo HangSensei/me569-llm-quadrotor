@@ -35,7 +35,7 @@ The control law is
 
 Default Q and R
 ---------------
-The default weights follow the baseline values from spec §3.1 / D011:
+The default weights follow the baseline values from spec §3.1:
 
     Q = diag(10, 10, 5, 1, 1, 0.5)
     R = diag(0.1, 0.1)
@@ -63,9 +63,9 @@ class LQRHoverController:
     params : QuadrotorParams
         Physical parameters used to build A, B.
     Q : np.ndarray of shape (6, 6), optional
-        State cost matrix. Default follows spec §3.1 / D011.
+        State cost matrix. Default follows spec §3.1.
     R : np.ndarray of shape (2, 2), optional
-        Control cost matrix. Default follows spec §3.1 / D011.
+        Control cost matrix. Default follows spec §3.1.
     """
 
     def __init__(

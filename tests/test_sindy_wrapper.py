@@ -108,6 +108,6 @@ def test_predict_returns_correct_shape(train_data):
 
 def test_baseline_default_is_polynomial_degree_3(train_data):
     result = fit_sindy(train_data)
-    # Default feature library must be polynomial degree 3 per D011
+    # Default feature library must be polynomial degree 3
     assert isinstance(result.feature_library, ps.PolynomialLibrary)
     assert result.feature_library.degree == 3

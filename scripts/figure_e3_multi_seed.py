@@ -1,4 +1,4 @@
-"""Figure 4 — E3 (Koopman) multi-seed P + Q failure annotation (D036 evidence).
+"""Figure 4 — E3 (Koopman) multi-seed P + Q failure annotation.
 
 Reads:
   - `results/koopman_results_clean.csv` (single-seed B, single-seed P clean)
@@ -6,13 +6,13 @@ Reads:
 
 Plots one-step MSE and 50-step rollout MSE for B (single bar) and
 P (3 dots + mean ± std), with Q annotated as failed (3 attempts under
-the clean prompt produced no fenced code; D036).
+the clean prompt produced no fenced code;).
 
 Headline narrative: the LLM-generated observable consistently beats the
 polynomial baseline by ~30× on one-step prediction and ~20× on 50-step
 rollout. The variance across 3 P calls is small relative to the gap to B.
 Q is fragile under precise clean prompts (4 independent failures across
-E3 + E4 — D036 + D038).
+E3 + E4 — +).
 
 Output: results/figure_e3_multi_seed.png
 """

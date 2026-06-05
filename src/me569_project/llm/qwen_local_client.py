@@ -17,7 +17,7 @@ skip the load step. A new model path triggers a reload.
 Thinking mode
 -------------
 Qwen3.5-4B is a reasoning model with ``<think>`` mode enabled by default
-(per decision D006). Its replies therefore typically start with a
+(by design). Its replies therefore typically start with a
 ``<think>...</think>`` block before the actual answer, which can consume
 most of a small token budget. This client defaults to ``max_tokens=2000``
 to give the model room for both reasoning and a reasonably sized
@@ -57,7 +57,7 @@ class QwenLocalClient:
     ----------
     model_path : str
         HuggingFace repo name of the MLX-converted weights. Defaults to
-        ``mlx-community/Qwen3.5-4B-MLX-8bit`` per decision D006.
+        ``mlx-community/Qwen3.5-4B-MLX-8bit`` by design.
     max_tokens : int
         Generation token budget. Default 2000 gives room for a
         ``<think>`` preamble plus the actual function. Values below
